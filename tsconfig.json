@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "locale": "zh-CN",
+    "module": "ESNext",
+    "target": "ES5",
+    "newLine": "LF",
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

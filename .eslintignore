@@ -1,0 +1,14 @@
+# node
+node_modules
+.yarn
+.pnp.js
+.pnp.cjs
+
+# project
+./utils
+
+# packages
+packages/**/lib
+packages/**/esm
+packages/**/dist
+packages/**/node_modules

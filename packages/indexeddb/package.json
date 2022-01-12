@@ -1,0 +1,15 @@
+{
+  "name": "@indexeddb-tools/indexeddb",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "scripts": {
+    "build": "rimraf lib && rimraf dist && NODE_OPTIONS=\"--experimental-json-modules\" gulp",
+    "test": "vite"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "vite": "^2.7.10"
+  }
+}

@@ -1,0 +1,6 @@
+.npmignore
+test
+src
+vite.config.js
+gulpfile.mjs
+dist-entry.js
