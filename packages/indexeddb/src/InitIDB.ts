@@ -1,42 +1,39 @@
-import ObjectStore from './objectStore/ObjectStore';
+import { ObjectStore } from './objectStore/ObjectStore';
 
 declare const webkitIndexedDB: IDBFactory;
 declare const mozIndexedDB: IDBFactory;
 declare const msIndexedDB: IDBFactory;
 
-interface IDBEvent {
-  readonly target: {
-    readonly result: IDBDatabase;
-  };
+export interface IDBEventTarget extends EventTarget {
+  result: IDBDatabase;
 }
 
-interface IDBErrorEvent {
-  readonly target: {
-    error: Error;
-  };
+export interface IDBEvent extends Event {
+  target: IDBEventTarget;
+}
+
+export interface IDBErrorEventTarget extends EventTarget {
+  error: Error;
+}
+
+export interface IDBErrorEvent extends Event {
+  target: IDBErrorEventTarget;
 }
 
 export interface CallbackObject {
-  success(this: InitDB, e: IDBEvent);
-  error(this: InitDB, e: IDBErrorEvent);
-  upgradeneeded(this: InitDB, e: IDBEvent & IDBVersionChangeEvent);
+  success(this: InitIDB, e: IDBEvent);
+  error?(this: InitIDB, e: IDBErrorEvent);
+  upgradeneeded?(this: InitIDB, e: IDBEvent & IDBVersionChangeEvent);
 }
 
-interface InitArgs {
-  name: string;
-  version: number;
-  callbackObject: CallbackObject;
-  writeAble?: boolean; // 是否只读
-}
-
-interface IndexItem {
+export interface IndexItem {
   name: string;  // 索引
   index: string | Array<string>; // 键值
   options?: IDBIndexParameters;
 }
 
 /* 初始化数据库 */
-class InitDB {
+export class InitIDB {
   // 浏览器兼容
   static idbFactory(): IDBFactory {
     return indexedDB || webkitIndexedDB || mozIndexedDB || msIndexedDB;
@@ -48,13 +45,17 @@ class InitDB {
   public request: IDBOpenDBRequest;
   public idbDatabase: IDBDatabase | null = null;
 
-  constructor(initArgs: InitArgs) {
+  constructor(initArgs: {
+    name: string;
+    version: number;
+    callbackObject: CallbackObject;
+  }) {
     this.name = initArgs.name;
     this.version = initArgs.version;
     this.callbackObject = initArgs.callbackObject ?? {};
 
     // 创建或者打开数据库
-    this.request = InitDB.idbFactory().open(this.name, this.version);
+    this.request = InitIDB.idbFactory().open(this.name, this.version);
 
     // 绑定函数
     this.request.addEventListener('success', this.handleOpenIDBSuccess.bind(this), false);
@@ -155,5 +156,3 @@ class InitDB {
     }
   }
 }
-
-export default InitDB;

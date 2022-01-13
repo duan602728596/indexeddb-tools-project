@@ -1,0 +1,15 @@
+{
+  "name": "@indexeddb-tools/indexeddb-redux",
+  "version": "0.0.1",
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
+    "gulp": "^4.0.2",
+    "redux": "^4.1.2",
+    "rimraf": "^3.0.2",
+    "vite": "^2.7.10"
+  },
+  "peerDependencies": {
+    "@indexeddb-tools/indexeddb": "*",
+    "redux": "^4.1.2"
+  }
+}

@@ -1,17 +1,44 @@
 import createIDBKeyRange from './createIDBKeyRange';
 
-interface ObjectStoreArgs {
-  objectStoreName: string;
-  idbDatabase: IDBDatabase;
-  writeAble: boolean;
+export interface GetEventTarget extends EventTarget {
+  result: Array<any>;
+}
+
+export interface GetEvent extends Event {
+  target: GetEventTarget;
+}
+
+export interface CursorEventTarget extends EventTarget {
+  result?: {
+    value: Array<any>;
+    continue: Function;
+  };
+}
+
+export interface CursorEvent extends Event {
+  target: CursorEventTarget;
+}
+
+type IDBData = Record<any, any>;
+
+interface GetCallback {
+  (this: ObjectStore, event: GetEvent);
+}
+
+interface CursorCallback {
+  (this: ObjectStore, event: CursorEvent);
 }
 
 /* 获取数据的操作 */
-class ObjectStore {
+export class ObjectStore {
   public idbDatabase: IDBDatabase;
   public idbStore: IDBObjectStore;
 
-  constructor(objectStoreArgs: ObjectStoreArgs) {
+  constructor(objectStoreArgs: {
+    objectStoreName: string;
+    idbDatabase: IDBDatabase;
+    writeAble: boolean;
+  }) {
     this.idbDatabase = objectStoreArgs.idbDatabase;
 
     const idbMode: IDBTransactionMode = objectStoreArgs.writeAble ? 'readwrite' : 'readonly';
@@ -27,26 +54,26 @@ class ObjectStore {
 
   /**
    * 添加数据
-   * @param { object | Array<Object> } arg: 数组添加多个数据，object添加单个数据
+   * @param { IDBData | Array<IDBData> } arg: 数组添加多个数据，object添加单个数据
    * @return { this }
    */
-  add(arg: object | Array<object>): this {
-    const data: Array<object> = Array.isArray(arg) ? arg : [arg];
+  add(arg: IDBData | Array<IDBData>): this {
+    const data: Array<IDBData> = Array.isArray(arg) ? arg : [arg];
 
-    data.forEach((o: object): unknown => this.idbStore.add(o));
+    data.forEach((o: IDBData): unknown => this.idbStore.add(o));
 
     return this;
   }
 
   /**
    * 更新数据
-   * @param { object | Array<object> } arg: 数组添加多个数据，object添加单个数据
+   * @param { IDBData | Array<IDBData> } arg: 数组添加多个数据，object添加单个数据
    * @return { this }
    */
-  put(arg: object | Array<object>): this {
-    const data: Array<object> = Array.isArray(arg) ? arg : [arg];
+  put(arg: IDBData | Array<IDBData>): this {
+    const data: Array<IDBData> = Array.isArray(arg) ? arg : [arg];
 
-    data.forEach((o: object): unknown => this.idbStore.put(o));
+    data.forEach((o: IDBData): unknown => this.idbStore.put(o));
 
     return this;
   }
@@ -74,18 +101,15 @@ class ObjectStore {
   /**
    * 获取数据
    * @param { string | number} value: 键值
-   * @param { Function } callback   : 获取成功的回调函数
+   * @param { GetCallback } callback   : 获取成功的回调函数
    * @return { this }
    */
-  get(value: string | number, callback: Function): this {
+  get(value: string | number, callback: GetCallback): this {
     const idbRequest: IDBRequest<object | undefined> = this.idbStore.get(value);
 
-    // 成功后的回调函数
-    const handleSuccess: EventListenerOrEventListenerObject = (event: Event): void => {
+    idbRequest.addEventListener('success', (event: GetEvent): void => {
       callback && callback.call(this, event);
-    };
-
-    idbRequest.addEventListener('success', handleSuccess, false);
+    });
 
     return this;
   }
@@ -105,12 +129,9 @@ class ObjectStore {
     const index: IDBIndex = this.idbStore.index(indexName);
     const cursor: IDBRequest<IDBCursorWithValue | null> = range ? index.openCursor(range) : index.openCursor();
 
-    // 成功后的回调函数
-    const handleSuccess: EventListenerOrEventListenerObject = (event: Event): void => {
-      callback && callback.call(this, event); // event.target.result.value && event.target.result.continue()
-    };
-
-    cursor.addEventListener('success', handleSuccess, false);
+    cursor.addEventListener('success', (event: CursorEvent): void => {
+      callback && callback.call(this, event);
+    });
 
     return this;
   }
@@ -119,21 +140,16 @@ class ObjectStore {
    * 根据IDBKeyRang查询
    * @param { string } indexName: 索引名
    * @param { IDBKeyRange } range: 原生的IDBKeyRange
-   * @param { Function } callback: 回调函数
+   * @param { CursorCallback } callback: 回调函数
    */
-  cursorByIDBKeyRang(indexName: string, range: IDBKeyRange, callback: Function): this {
+  cursorByIDBKeyRang(indexName: string, range: IDBKeyRange, callback: CursorCallback): this {
     const index: IDBIndex = this.idbStore.index(indexName);
     const cursor: IDBRequest<IDBCursorWithValue | null> = index.openCursor(range);
 
-    // 成功后的回调函数
-    const handleSuccess: EventListenerOrEventListenerObject = (event: Event): void => {
-      callback && callback.call(this, event); // event.target.result.value && event.target.result.continue()
-    };
-
-    cursor.addEventListener('success', handleSuccess, false);
+    cursor.addEventListener('success', (event: CursorEvent): void => {
+      callback && callback.call(this, event);
+    });
 
     return this;
   }
 }
-
-export default ObjectStore;

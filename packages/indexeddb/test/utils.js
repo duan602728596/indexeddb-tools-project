@@ -1,4 +1,4 @@
-import IndexedDB from '../src/index';
+import { initDatabase } from '../src/index';
 
 export const dbName = 'Test';
 const version = 1;
@@ -15,7 +15,7 @@ const tableName = 'table_';
 // 初始化数据库
 export function IDBInit() {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         resolve(true);
       },
@@ -35,7 +35,7 @@ export function IDBInit() {
  */
 export function objectStoreInit(name, data) {
   return new Promise((resolve, reject ) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const store = this.getObjectStore(name, true);
 
@@ -54,7 +54,7 @@ export function objectStoreInit(name, data) {
  */
 export function getIDBDataById(name, id) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const store = this.getObjectStore(name);
 
@@ -74,7 +74,7 @@ export function getIDBDataById(name, id) {
  */
 export function IDBPutData(name, data) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const store = this.getObjectStore(name, true);
 
@@ -94,7 +94,7 @@ export function IDBPutData(name, data) {
  */
 export function IDBCursorData(name, indexName, query) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const data = [];
         const store = this.getObjectStore(name, true);
@@ -128,7 +128,7 @@ export function IDBCursorData(name, indexName, query) {
  */
 export function IDBCursorByIDBKeyRangData(name, indexName, query) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const data = [];
         const store = this.getObjectStore(name, true);
@@ -156,7 +156,7 @@ export function IDBCursorByIDBKeyRangData(name, indexName, query) {
  */
 export function IDBDeleteData(name, id) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const store = this.getObjectStore(name, true);
 
@@ -174,7 +174,7 @@ export function IDBDeleteData(name, id) {
  */
 export function IDBClearData(name) {
   return new Promise((resolve, reject) => {
-    IndexedDB(dbName, version, {
+    initDatabase(dbName, version, {
       success(IDBEvent) {
         const store = this.getObjectStore(name, true);
 
