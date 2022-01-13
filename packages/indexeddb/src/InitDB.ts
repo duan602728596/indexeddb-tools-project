@@ -63,29 +63,29 @@ class InitDB {
   }
 
   // 打开数据库成功
-  handleOpenIDBSuccess(event: IDBEvent): void {
-    this.idbDatabase = event.target.result;
+  handleOpenIDBSuccess(IDBEvent: IDBEvent): void {
+    this.idbDatabase = IDBEvent.target.result;
 
     if (this.callbackObject.success) {
-      this.callbackObject.success.call(this, event);
+      this.callbackObject.success.call(this, IDBEvent);
     }
   }
 
   // 打开数据库失败
-  handleOpenIDBError(event: IDBErrorEvent): void {
-    console.error(event.target.error.message);
+  handleOpenIDBError(IDBEvent: IDBErrorEvent): void {
+    console.error(IDBEvent.target.error.message);
 
     if (this.callbackObject.error) {
-      this.callbackObject.error.call(this, event);
+      this.callbackObject.error.call(this, IDBEvent);
     }
   }
 
   // 更新数据库版本
-  handleIDBUpgradeneeded(event: IDBEvent & IDBVersionChangeEvent): void {
-    this.idbDatabase = event.target.result;
+  handleIDBUpgradeneeded(IDBEvent: IDBEvent & IDBVersionChangeEvent): void {
+    this.idbDatabase = IDBEvent.target.result;
 
     if (this.callbackObject.upgradeneeded) {
-      this.callbackObject.upgradeneeded.call(this, event);
+      this.callbackObject.upgradeneeded.call(this, IDBEvent);
     }
   }
 
