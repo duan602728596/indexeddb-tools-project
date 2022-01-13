@@ -27,7 +27,7 @@ export interface CallbackObject {
 }
 
 export interface IndexItem {
-  name: string;  // 索引
+  name: string; // 索引
   index: string | Array<string>; // 键值
   options?: IDBIndexParameters;
 }

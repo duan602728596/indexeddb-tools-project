@@ -19,8 +19,9 @@ export interface CursorEvent extends Event {
   target: CursorEventTarget;
 }
 
-type IDBData = Record<any, any>;
+type IDBData = Record<any, any>; // 数据库返回的类型
 
+// 定义获取数据的回调函数
 interface GetCallback {
   (this: ObjectStore, event: GetEvent);
 }
@@ -28,6 +29,11 @@ interface GetCallback {
 interface CursorCallback {
   (this: ObjectStore, event: CursorEvent);
 }
+
+// 定义游标查询的参数
+export type CursorArgsHasIDBValidKey = [IDBValidKey, Function];
+export type CursorArgsOnlyCallback = [Function];
+export type CursorArgs = CursorArgsHasIDBValidKey | CursorArgsOnlyCallback;
 
 /* 获取数据的操作 */
 export class ObjectStore {
@@ -120,14 +126,25 @@ export class ObjectStore {
    * @param { Array<any> } args
    * @return { this }
    */
-  cursor(indexName: string, ...args: unknown[]): this {
+  cursor(indexName: string, ...args: CursorArgs): this {
     // 查询成功的回调函数
-    const callback: Function = (typeof args[0] === 'function' ? args[0] : args[1]) as Function;
+    let callback: Function;
+    let range: IDBValidKey | undefined;
+
+    if (args.length === 1) {
+      const cursorArgs: CursorArgsOnlyCallback = args;
+
+      // eslint-disable-next-line @typescript-eslint/typedef
+      [range, callback] = [undefined, cursorArgs[0]];
+    } else {
+      // eslint-disable-next-line @typescript-eslint/typedef
+      [range, callback] = args;
+    }
 
     // 查询范围：有等于，大于等于，小于，小于等于，区间
-    const range: IDBValidKey | IDBKeyRange | undefined = args[1] ? createIDBKeyRange(args[0] as IDBValidKey) : undefined;
+    const IDBKeyRange: IDBValidKey | IDBKeyRange | undefined = range ? createIDBKeyRange(range) : undefined;
     const index: IDBIndex = this.idbStore.index(indexName);
-    const cursor: IDBRequest<IDBCursorWithValue | null> = range ? index.openCursor(range) : index.openCursor();
+    const cursor: IDBRequest<IDBCursorWithValue | null> = IDBKeyRange ? index.openCursor(IDBKeyRange) : index.openCursor();
 
     cursor.addEventListener('success', (event: CursorEvent): void => {
       callback && callback.call(this, event);
