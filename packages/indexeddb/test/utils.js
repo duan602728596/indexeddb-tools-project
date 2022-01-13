@@ -23,8 +23,6 @@ export function IDBInit() {
         for (let i = 0; i < 5; i++) {
           this.createObjectStore(`${ tableName }${ i }`, keyPath, objectStore);
         }
-
-        resolve(true);
       }
     });
   });
