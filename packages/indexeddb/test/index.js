@@ -15,8 +15,6 @@ import {
 } from './utils';
 import mockDataJson from './mock.json';
 
-const { mockData } = mockDataJson;
-
 mocha.timeout(180000);
 mocha.setup('bdd');
 
@@ -29,6 +27,8 @@ function sortCallback(b, r) {
     return 0;
   }
 }
+
+const { mockData } = mockDataJson;
 
 describe('数据库测试', function() {
   describe('初始化数据库', function() {
@@ -56,12 +56,14 @@ describe('数据库测试', function() {
 
     it('测试数据的更新和获取', async function() {
       const saveResult = await objectStoreInit('table_1', mockData[0].data);
+
+      expect(saveResult).to.be.true;
+
       const putDataResult = await IDBPutData('table_1', mockData[1].data);
       const cursorQueryResult = await IDBCursorData('table_1', 'username');
 
       cursorQueryResult.sort(sortCallback);
 
-      expect(saveResult).to.be.true;
       expect(putDataResult).to.be.true;
       expect(cursorQueryResult).to.eql(mockData[1].data);
     });

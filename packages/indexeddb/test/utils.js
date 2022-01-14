@@ -1,7 +1,7 @@
 import { initDatabase } from '../src/index';
 
 export const dbName = 'Test';
-const version = 1;
+export const version = 1;
 const keyPath = 'id';
 const objectStore = [
   { name: 'username', index: 'username' },

@@ -1,6 +1,10 @@
 {
   "name": "@indexeddb-tools/indexeddb-redux",
   "version": "0.0.1",
+  "scripts": {
+    "build": "rimraf lib && rimraf dist && NODE_OPTIONS=\"--experimental-json-modules\" gulp",
+    "test": "vite"
+  },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.7.1",
     "gulp": "^4.0.2",

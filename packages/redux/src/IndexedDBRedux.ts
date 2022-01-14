@@ -34,6 +34,7 @@ export interface CursorQueryByIDBKeyRangArgs {
   query: CursorByIDBKeyRangQuery;
 }
 
+// 返回的数据类型
 export interface ActionResult {
   query?: string | number | CursorQuery | CursorByIDBKeyRangQuery;
   data?: any | Array<any>;
@@ -41,10 +42,28 @@ export interface ActionResult {
   error?: Error;
 }
 
+// action的参数类型
 export interface ActionArgs {
   objectStoreName: string;
-  successAction(ActionResult);
+  successAction?(ActionResult);
   failAction?(ActionResult);
+}
+
+// 创建action的返回类型
+export interface DataDispatchFunc {
+  (args: DateArgs);
+}
+
+export interface QueryDispatchFunc {
+  (args: QueryArgs);
+}
+
+export interface CursorDispatchFunc {
+  (args: CursorQueryArgs);
+}
+
+export interface CursorByIDBKeyRangDispatchFunc {
+  (args: CursorQueryByIDBKeyRangArgs);
 }
 
 export class IndexedDBRedux {
@@ -67,7 +86,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  addAction({ objectStoreName, successAction, failAction }: ActionArgs): Function {
+  addAction({ objectStoreName, successAction, failAction }: ActionArgs): DataDispatchFunc {
     return (args: DateArgs): Function => {
       const { data }: DateArgs = args;
 
@@ -97,7 +116,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  putAction({ objectStoreName, successAction, failAction }: ActionArgs): Function {
+  putAction({ objectStoreName, successAction, failAction }: ActionArgs): DataDispatchFunc {
     return (args: DateArgs): Function => {
       const { data }: DateArgs = args;
 
@@ -127,7 +146,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  deleteAction({ objectStoreName, successAction, failAction }: ActionArgs): Function {
+  deleteAction({ objectStoreName, successAction, failAction }: ActionArgs): QueryDispatchFunc {
     return (args: QueryArgs): Function => {
       const { query }: QueryArgs = args;
 
@@ -184,7 +203,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  getAction({ objectStoreName, successAction, failAction }: ActionArgs): Function {
+  getAction({ objectStoreName, successAction, failAction }: ActionArgs): QueryDispatchFunc {
     return (args: QueryArgs): Function => {
       const { query }: QueryArgs = args;
 
@@ -222,7 +241,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  cursorAction({ objectStoreName, successAction, failAction }: ActionArgs): Function {
+  cursorAction({ objectStoreName, successAction, failAction }: ActionArgs): CursorDispatchFunc {
     return (args: CursorQueryArgs): Function => {
       const { indexName, range }: CursorQuery = args.query;
 
@@ -271,7 +290,7 @@ export class IndexedDBRedux {
    * @param successAction: 获取数据成功的Action
    * @param failAction: 获取数据失败的Action
    */
-  cursorByIDBKeyRangAction({ objectStoreName, successAction, failAction }: ActionArgs) {
+  cursorByIDBKeyRangAction({ objectStoreName, successAction, failAction }: ActionArgs): CursorByIDBKeyRangDispatchFunc {
     return (args: CursorQueryByIDBKeyRangArgs): Function => {
       const { indexName, range }: CursorByIDBKeyRangQuery = args.query;
 
