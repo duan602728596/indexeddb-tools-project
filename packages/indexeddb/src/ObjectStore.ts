@@ -141,7 +141,7 @@ export class ObjectStore {
       [range, callback] = args;
     }
 
-    // 查询范围：有等于，大于等于，小于，小于等于，区间
+    // 查询范围：等于，大于，大于等于，小于，小于等于，区间
     const IDBKeyRange: IDBValidKey | IDBKeyRange | undefined = range ? createIDBKeyRange(range) : undefined;
     const index: IDBIndex = this.idbStore.index(indexName);
     const cursor: IDBRequest<IDBCursorWithValue | null> = IDBKeyRange ? index.openCursor(IDBKeyRange) : index.openCursor();
