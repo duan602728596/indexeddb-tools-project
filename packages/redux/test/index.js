@@ -83,7 +83,7 @@ describe('数据库redux封装测试', function() {
         const queryMoneyResult = await dispatch(IDBCursor({
           query: {
             indexName: 'money',
-            range: '[100, 3250)'
+            range: '>= 100 && < 3250'
           }
         }));
 
@@ -110,7 +110,7 @@ describe('数据库redux封装测试', function() {
       expect(saveResult).to.be.true;
 
       {
-        const IDBCursorByIDBKeyRang = IDBRedux.cursorByIDBKeyRangAction({ objectStoreName: 'table_3' });
+        const IDBCursorByIDBKeyRang = IDBRedux.cursorAction({ objectStoreName: 'table_3' });
         const sexMoneyResult = await dispatch(IDBCursorByIDBKeyRang({
           query: {
             indexName: 'sex_money',
