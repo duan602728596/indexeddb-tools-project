@@ -1,4 +1,4 @@
-import createIDBKeyRange from './createIDBKeyRange';
+import createIDBKeyRange from './IDBKeyRange/createIDBKeyRange';
 
 export interface GetEventTarget extends EventTarget {
   result: Array<any>;

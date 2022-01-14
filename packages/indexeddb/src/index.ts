@@ -27,4 +27,4 @@ export function deleteDatabase(databaseName: string): IDBOpenDBRequest {
 
 /* 导出类型 */
 export * from './InitIDB';
-export * from './objectStore/ObjectStore';
+export * from './ObjectStore';

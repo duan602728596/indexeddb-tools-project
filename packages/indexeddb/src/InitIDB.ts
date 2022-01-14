@@ -1,4 +1,4 @@
-import { ObjectStore } from './objectStore/ObjectStore';
+import { ObjectStore } from './ObjectStore';
 
 declare const webkitIndexedDB: IDBFactory;
 declare const mozIndexedDB: IDBFactory;
