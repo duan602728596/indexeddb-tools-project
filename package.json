@@ -1,5 +1,5 @@
 {
-  "name": "@indexeddb-tools/project",
+  "name": "indexeddb-tools-project",
   "license": "MIT",
   "type": "module",
   "scripts": {
