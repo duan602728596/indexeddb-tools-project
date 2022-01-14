@@ -13,14 +13,14 @@ const objectStore = [
 const tableName = 'table_';
 
 // 初始化数据库
-export function IDBInit() {
+export function IDBInit(tableLength) {
   return new Promise((resolve, reject) => {
     initDatabase(dbName, version, {
       success(IDBEvent) {
         resolve(true);
       },
       upgradeneeded(event) {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < tableLength; i++) {
           this.createObjectStore(`${ tableName }${ i }`, keyPath, objectStore);
         }
       }

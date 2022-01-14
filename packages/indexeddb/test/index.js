@@ -32,7 +32,7 @@ const { mockData } = mockDataJson;
 describe('数据库测试', function() {
   describe('初始化数据库', function() {
     it('初始化数据库', async function() {
-      const result = await IDBInit();
+      const result = await IDBInit(5);
 
       expect(result).to.be.true;
     });
