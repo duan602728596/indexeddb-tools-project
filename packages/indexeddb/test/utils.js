@@ -19,7 +19,7 @@ export function IDBInit(tableLength) {
       success(IDBEvent) {
         resolve(true);
       },
-      upgradeneeded(event) {
+      upgradeneeded(IDBEvent) {
         for (let i = 0; i < tableLength; i++) {
           this.createObjectStore(`${ tableName }${ i }`, keyPath, objectStore);
         }
