@@ -88,6 +88,22 @@ describe('数据库测试', function() {
         expect(queryMoneyResult).to.eql(mockData[2].data.filter((o) => o.money > 400 && o.money <= 7300));
       }
 
+      // 查询money大于等于400且小于5200
+      {
+        const queryMoneyResult = await IDBCursorData('table_2', 'money', '>= 400 && < 5200');
+
+        queryMoneyResult.sort(sortCallback);
+        expect(queryMoneyResult).to.eql(mockData[2].data.filter((o) => o.money >= 400 && o.money < 5200));
+      }
+
+      // 查询money大于3200且小于等于9500
+      {
+        const queryMoneyResult = await IDBCursorData('table_2', 'money', '<= 9500 && > 3200');
+
+        queryMoneyResult.sort(sortCallback);
+        expect(queryMoneyResult).to.eql(mockData[2].data.filter((o) => o.money > 3200 && o.money <= 9500));
+      }
+
       // 查询藤原千花
       {
         const queryFujiwaraChikaResult = await IDBCursorData('table_2', 'username', '藤原千花');

@@ -5,20 +5,77 @@ import {
   isLowerAndEqual,
   isInterval,
   isLeftOpenInterval,
-  isRightOpenInterval
+  isRightOpenInterval,
+  isIntervalByAndSymbol
 } from './rangeParser';
-import { matchNumber, getRangeNumber } from './utils';
+import { matchNumber, getRangeNumber, isAllNotNil } from './utils';
+
+interface RangeIntervalResult {
+  position: 'left' | 'right';
+  open: boolean;
+  value: number;
+}
+
+/**
+ * 判断区间和数字
+ * @param { string | undefined } intervalRange
+ */
+function rangeInterval(intervalRange: string | undefined): RangeIntervalResult | undefined {
+  if (!intervalRange) return;
+
+  // 解析数字
+  const rangeResult: number | undefined = getRangeNumber(intervalRange);
+
+  if (typeof rangeResult !== 'number') return;
+
+  // 大于
+  if (isUpper(intervalRange)) {
+    return {
+      position: 'left',
+      open: true,
+      value: rangeResult
+    };
+  }
+
+  // 大于等于
+  if (isUpperAndEqual(intervalRange)) {
+    return {
+      position: 'left',
+      open: false,
+      value: rangeResult
+    };
+  }
+
+  // 小于
+  if (isLower(intervalRange)) {
+    return {
+      position: 'right',
+      open: true,
+      value: rangeResult
+    };
+  }
+
+  // 小于等于
+  if (isLowerAndEqual(intervalRange)) {
+    return {
+      position: 'right',
+      open: false,
+      value: rangeResult
+    };
+  }
+}
 
 /**
  * 获取IDBKeyRange
  * 根据字符串返回游标查询的范围，例如：
- * '5'      等于rollup
- * '>  5'   大于
- * '>= 5'   大于等于
- * '<  5'   小于
- * '<= 5'   小于等于
- * '[5, 8]' 闭区间
- * '(5, 8)' 开区间
+ * '5'         等于
+ * '>  5'      大于
+ * '>= 5'      大于等于
+ * '<  5'      小于
+ * '<= 5'      小于等于
+ * '[5, 8]'    闭区间
+ * '(5, 8)'    开区间
+ * >= 5 && < 8 区间的另一种形式
  * @param { IDBValidKey } range: 传递字符串
  */
 function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange {
@@ -80,6 +137,37 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange {
       ];
 
       return IDBKeyRange.bound(Number(leftNumber), Number(rightNumber), leftOpenInterval, rightOpenInterval);
+    }
+  }
+
+  // 使用&&符号来实现区间
+  if (isIntervalByAndSymbol(range)) {
+    const interval: string[] = range.split(/&&/);
+    const rangeIntervalResults: (RangeIntervalResult | undefined)[] = [
+      rangeInterval(interval[0]),
+      rangeInterval(interval[1])
+    ];
+    let [lower, upper, lowerOpen, upperOpen]: [
+      number | undefined,
+      number | undefined,
+      boolean | undefined,
+      boolean | undefined
+    ] = [undefined, undefined, undefined, undefined];
+
+    for (const rangeIntervalResult of rangeIntervalResults) {
+      if (rangeIntervalResult) {
+        if (rangeIntervalResult.position === 'left') {
+          lower = rangeIntervalResult.value;
+          lowerOpen = rangeIntervalResult.open;
+        } else {
+          upper = rangeIntervalResult.value;
+          upperOpen = rangeIntervalResult.open;
+        }
+      }
+    }
+
+    if (isAllNotNil(lower, upper, lowerOpen, upperOpen)) {
+      return IDBKeyRange.bound(lower, upper, lowerOpen, upperOpen);
     }
   }
 

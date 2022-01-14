@@ -17,3 +17,11 @@ export function getRangeNumber(range: string): number | undefined {
     return Number(rangeMatchResult[0]);
   }
 }
+
+/**
+ * 判断是否全都有值
+ * @param { unknown } value
+ */
+export function isAllNotNil(...value: unknown[]): boolean {
+  return !value.some((o: unknown): boolean => typeof value === 'undefined' || value === null);
+}

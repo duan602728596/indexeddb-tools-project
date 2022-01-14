@@ -53,3 +53,11 @@ export function isLeftOpenInterval(range: string): boolean {
 export function isRightOpenInterval(range: string): boolean {
   return /^.*\).*$/i.test(range);
 }
+
+/**
+ * 区间的另一种实现方式
+ * @param { string } range
+ */
+export function isIntervalByAndSymbol(range: string): boolean {
+  return /^.+&{2}.+$/i.test(range);
+}
