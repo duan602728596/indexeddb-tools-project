@@ -29,6 +29,16 @@ import { deleteDatabase } from '@indexeddb-tools/indexeddb';
 deleteDatabase(dbName);
 ```
 
+### 关闭数据库
+
+```javascript
+initDatabase(dbName, dbVersion, {
+  success(event) {
+    this.close();
+  }
+});
+```
+
 ### 创建一个objectStore来存储数据
 
 ```javascript
@@ -48,7 +58,7 @@ initDatabase(name, version, {
 });
 ```
 
-### 判断是否有ObjectStore
+### 判断是否有objectStore
 
 ```javascript
 initDatabase(dbName, dbVersion, {
