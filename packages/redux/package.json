@@ -1,6 +1,15 @@
 {
   "name": "@indexeddb-tools/indexeddb-redux",
   "version": "0.0.1",
+  "license": "MIT",
+  "keywords": [
+    "indexeddb",
+    "indexeddb-tools",
+    "tools"
+  ],
+  "homepage": "https://github.com/duan602728596/indexeddb-tools-project",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
   "scripts": {
     "build": "rimraf lib && rimraf dist && NODE_OPTIONS=\"--experimental-json-modules\" gulp",
     "test": "vite"

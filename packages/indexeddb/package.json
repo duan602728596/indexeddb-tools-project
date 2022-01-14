@@ -1,6 +1,13 @@
 {
   "name": "@indexeddb-tools/indexeddb",
   "version": "0.0.1",
+  "license": "MIT",
+  "keywords": [
+    "indexeddb",
+    "indexeddb-tools",
+    "tools"
+  ],
+  "homepage": "https://github.com/duan602728596/indexeddb-tools-project",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "scripts": {
