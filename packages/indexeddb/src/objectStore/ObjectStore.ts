@@ -152,21 +152,4 @@ export class ObjectStore {
 
     return this;
   }
-
-  /**
-   * 根据IDBKeyRang查询
-   * @param { string } indexName: 索引名
-   * @param { IDBKeyRange } range: 原生的IDBKeyRange
-   * @param { CursorCallback } callback: 回调函数
-   */
-  cursorByIDBKeyRang(indexName: string, range: IDBKeyRange, callback: CursorCallback): this {
-    const index: IDBIndex = this.idbStore.index(indexName);
-    const cursor: IDBRequest<IDBCursorWithValue | null> = index.openCursor(range);
-
-    cursor.addEventListener('success', (event: CursorEvent): void => {
-      callback && callback.call(this, event);
-    });
-
-    return this;
-  }
 }

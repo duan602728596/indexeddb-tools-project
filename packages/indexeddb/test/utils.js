@@ -121,35 +121,6 @@ export function IDBCursorData(name, indexName, query) {
 }
 
 /**
- * 利用游标查找数据
- * @param { string } name: 数据库表名
- * @param { string } indexName: 查询字段
- * @param { IDBKeyRange } query: 查询条件
- */
-export function IDBCursorByIDBKeyRangData(name, indexName, query) {
-  return new Promise((resolve, reject) => {
-    initDatabase(dbName, version, {
-      success(IDBEvent) {
-        const data = [];
-        const store = this.getObjectStore(name, true);
-
-        store.cursorByIDBKeyRang(indexName, query, function(e) {
-          const result = e.target.result;
-
-          if (result) {
-            data.push(result.value);
-            result.continue();
-          } else {
-            resolve(data);
-            this.close();
-          }
-        });
-      }
-    });
-  });
-}
-
-/**
  * 删除数据
  * @param { string } name: 数据库表名
  * @param { string | number | Array<string | number> } id

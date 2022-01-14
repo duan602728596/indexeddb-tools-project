@@ -30,10 +30,6 @@ export interface CursorByIDBKeyRangQuery {
   range: IDBKeyRange;
 }
 
-export interface CursorQueryByIDBKeyRangArgs {
-  query: CursorByIDBKeyRangQuery;
-}
-
 // 返回的数据类型
 export interface ActionResult {
   query?: string | number | CursorQuery | CursorByIDBKeyRangQuery;
@@ -60,10 +56,6 @@ export interface QueryDispatchFunc {
 
 export interface CursorDispatchFunc {
   (args: CursorQueryArgs);
-}
-
-export interface CursorByIDBKeyRangDispatchFunc {
-  (args: CursorQueryByIDBKeyRangArgs);
 }
 
 export class IndexedDBRedux {
@@ -272,51 +264,6 @@ export class IndexedDBRedux {
                 const cursorArgs: CursorArgs = range ? [range, cursorCallback] : [cursorCallback];
 
                 store.cursor(indexName, ...cursorArgs);
-              } else {
-                callback({ query: args.query, result: [] });
-              }
-            }
-          });
-        }).catch((err: Error): void => {
-          failAction && dispatch(failAction({ query: args.query, error: err }));
-        });
-      };
-    };
-  }
-
-  /**
-   * 根据IDBKeyRang查询
-   * @param { string } objectStoreName: objectStore的名字
-   * @param successAction: 获取数据成功的Action
-   * @param failAction: 获取数据失败的Action
-   */
-  cursorByIDBKeyRangAction({ objectStoreName, successAction, failAction }: ActionArgs): CursorByIDBKeyRangDispatchFunc {
-    return (args: CursorQueryByIDBKeyRangArgs): Function => {
-      const { indexName, range }: CursorByIDBKeyRangQuery = args.query;
-
-      return (dispatch: Dispatch): Promise<ActionResult | void> => {
-        return new Promise<ActionResult>((resolve: Function, reject: Function): void => {
-          initDatabase(this.name, this.version, {
-            success(idbEvent: IDBEvent): void {
-              const store: ObjectStore | undefined = this.getObjectStore(objectStoreName);
-
-              const callback: Function = (actionResult: ActionResult): void => {
-                successAction && dispatch(successAction(actionResult));
-                resolve(actionResult);
-                this.close();
-              };
-
-              if (store) {
-                const IDBResult: Array<any> = [];
-
-                store.cursorByIDBKeyRang(indexName, range, function(event: CursorEvent): void {
-                  if (event.target.result) {
-                    IDBResult.push(event.target.result.value);
-                    event.target.result.continue();
-                  } else {
-                    callback({ query: args.query, result: IDBResult });
-                  }
-                });
               } else {
                 callback({ query: args.query, result: [] });
               }

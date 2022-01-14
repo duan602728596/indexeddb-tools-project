@@ -9,7 +9,6 @@ import {
   getIDBDataById,
   IDBPutData,
   IDBCursorData,
-  IDBCursorByIDBKeyRangData,
   IDBDeleteData,
   IDBClearData
 } from './utils';
@@ -119,7 +118,7 @@ describe('数据库测试', function() {
       expect(saveResult).to.be.true;
 
       {
-        const result = await IDBCursorByIDBKeyRangData(
+        const result = await IDBCursorData(
           'table_3', 'sex_money', IDBKeyRange.only(['女', 5200]));
 
         expect(result).to.eql(mockData[2].data.filter((o) => o.sex === '女' && o.money === 5200));

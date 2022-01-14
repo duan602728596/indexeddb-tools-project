@@ -10,13 +10,13 @@
  * '(5, 8)' 开区间
  * @param { IDBValidKey } range: 传递字符串
  */
-function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange | undefined {
+function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange {
   // 判断是否为数组，用于多条件查询
   if (Array.isArray(range)) {
     return IDBKeyRange.only(range);
   }
 
-  // 如果是数字类型，不作处理
+  // 如果是数字类型或者是IDBKeyRange，不作处理
   if (typeof range !== 'string') {
     return range;
   }
@@ -27,8 +27,6 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange | unde
 
     if (regMatchArr) {
       return IDBKeyRange.lowerBound(Number(regMatchArr[0]), true);
-    } else {
-      return undefined;
     }
   }
 
@@ -38,8 +36,6 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange | unde
 
     if (regMatchArr) {
       return IDBKeyRange.lowerBound(Number(regMatchArr[0]));
-    } else {
-      return undefined;
     }
   }
 
@@ -49,8 +45,6 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange | unde
 
     if (regMatchArr) {
       return IDBKeyRange.upperBound(Number(regMatchArr[0]), true);
-    } else {
-      return undefined;
     }
   }
 
@@ -60,8 +54,6 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange | unde
 
     if (regMatchArr) {
       return IDBKeyRange.upperBound(Number(regMatchArr[0]));
-    } else {
-      return undefined;
     }
   }
 
