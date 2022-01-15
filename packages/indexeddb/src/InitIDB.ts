@@ -116,12 +116,10 @@ export class InitIDB {
    * @return { this }
    */
   createObjectStore(objectStoreName: string, keyPath: string, indexArray: Array<IndexItem>): this {
-    if (this.idbDatabase) {
-      if (!this.hasObjectStore(objectStoreName)) {
-        const store: IDBObjectStore = this.idbDatabase.createObjectStore(objectStoreName, { keyPath });
+    if (this.idbDatabase && !this.hasObjectStore(objectStoreName) && indexArray?.length) {
+      const store: IDBObjectStore = this.idbDatabase.createObjectStore(objectStoreName, { keyPath });
 
-        indexArray && indexArray.forEach((o: IndexItem): unknown => store.createIndex(o.name, o.index, o.options));
-      }
+      indexArray.forEach((o: IndexItem): unknown => store.createIndex(o.name, o.index, o.options));
     }
 
     return this;
