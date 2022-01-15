@@ -4,6 +4,18 @@
 
 ## 使用方法
 
+### 安装
+
+```shell
+npm install @indexeddb-tools/indexeddb
+```
+
+或者
+
+```shell
+yarn add @indexeddb-tools/indexeddb
+```
+
 ### 初始化
 
 ```javascript

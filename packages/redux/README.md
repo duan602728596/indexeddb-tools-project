@@ -4,6 +4,18 @@ indexeddb对redux的封装。
 
 ## 使用方法
 
+### 安装
+
+```shell
+npm install @indexeddb-tools/indexeddb @indexeddb-tools/indexeddb-redux
+```
+
+或者
+
+```shell
+yarn add @indexeddb-tools/indexeddb @indexeddb-tools/indexeddb-redux
+```
+
 ### 初始化
 
 ```javascript
