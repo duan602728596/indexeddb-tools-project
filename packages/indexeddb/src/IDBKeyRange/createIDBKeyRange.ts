@@ -147,12 +147,7 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange {
       rangeInterval(interval[0]),
       rangeInterval(interval[1])
     ];
-    let [lower, upper, lowerOpen, upperOpen]: [
-      number | undefined,
-      number | undefined,
-      boolean | undefined,
-      boolean | undefined
-    ] = [undefined, undefined, undefined, undefined];
+    let lower: number | undefined, upper: number | undefined, lowerOpen: boolean | undefined, upperOpen: boolean | undefined;
 
     for (const rangeIntervalResult of rangeIntervalResults) {
       if (rangeIntervalResult) {
