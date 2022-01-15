@@ -56,7 +56,7 @@ dispatch(IDBAdd({
   data: []
 }));
 
-// 获取、查询数据
+// 查询、删除数据
 const IDBGet = IDBRedux.getAction({ objectStoreName: 'objectStoreName' });
 
 const IDBDelete = IDBRedux.deleteAction({ objectStoreName: 'objectStoreName' });
