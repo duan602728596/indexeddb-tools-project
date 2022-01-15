@@ -159,7 +159,7 @@ function createIDBKeyRange(range: IDBValidKey): IDBValidKey | IDBKeyRange {
         if (rangeIntervalResult.position === 'left') {
           lower = rangeIntervalResult.value;
           lowerOpen = rangeIntervalResult.open;
-        } else {
+        } else if (rangeIntervalResult.position === 'right') {
           upper = rangeIntervalResult.value;
           upperOpen = rangeIntervalResult.open;
         }
