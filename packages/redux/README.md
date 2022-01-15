@@ -1,4 +1,4 @@
-# @indexeddb-tools/indexeddb-redux
+indexeddb-redux
 
 indexeddb对redux的封装。
 
