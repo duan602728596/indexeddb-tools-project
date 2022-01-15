@@ -93,10 +93,10 @@ function reducer(state = {}, action) {
 
   switch(action.type){
     case 'TYPE_1':
-      return { ...state, data_1: action.result };
+      return { ...state, data_1: action.payload.result };
       
     case 'TYPE_2':
-      return { ...state, data_2: action.result };
+      return { ...state, data_2: action.payload.result };
       
     default:
       return state;
