@@ -31,8 +31,8 @@ interface CursorCallback {
 }
 
 // 定义游标查询的参数
-export type CursorArgsHasIDBValidKey = [IDBValidKey, Function];
-export type CursorArgsOnlyCallback = [Function];
+export type CursorArgsHasIDBValidKey = [IDBValidKey, CursorCallback];
+export type CursorArgsOnlyCallback = [CursorCallback];
 export type CursorArgs = CursorArgsHasIDBValidKey | CursorArgsOnlyCallback;
 
 /* 获取数据的操作 */
@@ -128,18 +128,9 @@ export class ObjectStore {
    */
   cursor(indexName: string, ...args: CursorArgs): this {
     // 查询成功的回调函数
-    let callback: Function;
-    let range: IDBValidKey | undefined;
-
-    if (args.length === 1) {
-      const cursorArgs: CursorArgsOnlyCallback = args;
-
-      // eslint-disable-next-line @typescript-eslint/typedef
-      [range, callback] = [undefined, cursorArgs[0]];
-    } else {
-      // eslint-disable-next-line @typescript-eslint/typedef
-      [range, callback] = args;
-    }
+    const [range, callback]: [IDBValidKey | undefined, CursorCallback] = args.length === 1
+      ? [undefined, (args as CursorArgsOnlyCallback)[0]]
+      : args as CursorArgsHasIDBValidKey;
 
     // 查询范围：等于，大于，大于等于，小于，小于等于，区间
     const IDBKeyRange: IDBValidKey | IDBKeyRange | undefined = range ? createIDBKeyRange(range) : undefined;
