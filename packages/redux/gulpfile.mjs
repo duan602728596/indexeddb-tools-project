@@ -31,7 +31,7 @@ function createProBuildProject(compression) {
       globals: {
         '@indexeddb-tools/indexeddb': 'IndexedDB'
       },
-      file: `dist/IDBRedux${ compression ? '.min' : '' }.js`
+      file: `dist/IndexedDB-redux${ compression ? '.min' : '' }.js`
     });
   };
 }
