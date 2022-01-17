@@ -143,7 +143,7 @@ store.delete(value);
 ### 清除objectStore内的数据
 
 ```javascript
-store.clear(value);
+store.clear();
 ```
 
 ### 通过游标查询
