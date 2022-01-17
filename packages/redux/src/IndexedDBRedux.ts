@@ -4,7 +4,9 @@ import {
   type ObjectStore,
   type GetEvent,
   type CursorEvent,
-  type CursorArgs
+  type CursorArgs,
+  type CursorArgsHasIDBValidKey,
+  type CursorArgsOnlyCallback
 } from '@indexeddb-tools/indexeddb';
 import type { Dispatch } from 'redux';
 
@@ -261,7 +263,9 @@ export class IndexedDBRedux {
                   }
                 };
 
-                const cursorArgs: CursorArgs = range ? [range, cursorCallback] : [cursorCallback];
+                const cursorArgs: CursorArgs = range
+                  ? [range, cursorCallback] as CursorArgsHasIDBValidKey
+                  : [cursorCallback] as CursorArgsOnlyCallback;
 
                 store.cursor(indexName, ...cursorArgs);
               } else {
